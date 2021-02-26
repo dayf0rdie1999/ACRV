@@ -28,14 +28,17 @@ class MainActivity : AppCompatActivity() {
         val repository = Repository();
         val mainViewModelFactory = MainViewModelFactory(repository)
 
+        // Binding Host Fragment and navController
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView2) as NavHostFragment
         val navController = navHostFragment.navController
 
+        // Binding information in the my_nav to to update the supportActionBar
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController,appBarConfiguration)
 
     }
 
+    // Updating the navigation system to include all information of all 3 views to navigate around
     override fun onSupportNavigateUp(): Boolean {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView2) as NavHostFragment
         val navController = navHostFragment.navController

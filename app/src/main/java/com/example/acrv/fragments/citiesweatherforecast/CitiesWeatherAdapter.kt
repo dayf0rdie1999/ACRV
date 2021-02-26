@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acrv.R
-import com.example.acrv.fragments.weatherForeCastFragment
 import com.example.acrv.fragments.weatherForeCastFragmentDirections
 import com.example.acrv.modelpackage.citiesmodel.CityWeather
 
