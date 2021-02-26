@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/weatherForeCastFragment">
+
+    <fragment
+        android:id="@+id/weatherForeCastFragment"
+        android:name="com.example.acrv.fragments.weatherForeCastFragment"
+        android:label="Weather Forecast"
+        tools:layout="@layout/fragment_weather_fore_cast" >
+        <action
+            android:id="@+id/action_weatherForeCastFragment_to_userWeatherForecastFragment"
+            app:destination="@id/userWeatherForecastFragment" />
+        <action
+            android:id="@+id/action_weatherForeCastFragment_to_cityWeatherFragment"
+            app:destination="@id/cityWeatherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userWeatherForecastFragment"
+        android:name="com.example.acrv.fragments.userWeatherForecastFragment"
+        android:label="User Cities Weather"
+        tools:layout="@layout/fragment_user_weather_forecast" >
+        <action
+            android:id="@+id/action_userWeatherForecastFragment_to_weatherForeCastFragment"
+            app:destination="@id/weatherForeCastFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cityWeatherFragment"
+        android:name="com.example.acrv.fragments.cityWeatherFragment"
+        android:label="City Weather"
+        tools:layout="@layout/fragment_city_weather" >
+        <argument
+            android:name="cityWeatherInformation"
+            app:argType="com.example.acrv.modelpackage.citiesmodel.CityWeather" />
+        <action
+            android:id="@+id/action_cityWeatherFragment_to_weatherForeCastFragment"
+            app:destination="@id/weatherForeCastFragment" />
+    </fragment>
+</navigation>
