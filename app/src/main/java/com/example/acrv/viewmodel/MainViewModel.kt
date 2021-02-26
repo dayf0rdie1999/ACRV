@@ -13,6 +13,7 @@ class MainViewModel(private val repository: Repository): ViewModel(){
 
     val myResponse: MutableLiveData<Response<CoordWeather>> = MutableLiveData()
     val myCitiesWeather: MutableLiveData<Response<CitiesWeather>> = MutableLiveData()
+    val myCityWeather: MutableLiveData<Response<CoordWeather>> = MutableLiveData()
 
     fun getWeather() {
         viewModelScope.launch {
@@ -27,6 +28,14 @@ class MainViewModel(private val repository: Repository): ViewModel(){
             myCitiesWeather.value = citiesWeatherResponse
         }
 
+    }
+
+    // Creating a function to run the function in the background
+    fun getCityWeather(name: String) {
+        viewModelScope.launch {
+            val cityWeatherResponse = repository.getCityWeather(name)
+            myCityWeather.value = cityWeatherResponse
+        }
     }
 
 }

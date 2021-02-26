@@ -15,6 +15,7 @@ class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWe
 
     private var myCitiesWeatherList = emptyList<CityWeather>()
 
+
     inner class MyCitiesWeatherViewHoler(itemView: View): RecyclerView.ViewHolder(itemView) {
         var itemCityNameCard: TextView
         var itemRainCard: TextView
@@ -55,6 +56,8 @@ class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWe
         myCitiesWeatherList = newList;
         notifyDataSetChanged()
     }
+
+
 
 
 }

@@ -11,8 +11,14 @@ class Repository {
         return RetrofitInstance.api.getWeather()
     }
 
+    // Creating a function to read get all the data
     suspend fun getCitiesWeather(): Response<CitiesWeather> {
         return RetrofitInstance.api.getCitiesWeather()
+    }
+
+    // Creating a function to implement the Interface from simpleApi
+    suspend fun getCityWeather(name: String): Response<CoordWeather> {
+        return RetrofitInstance.api.getCityWeather(name)
     }
 
 }
