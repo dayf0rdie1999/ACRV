@@ -1,0 +1,341 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+CitiesWeather*-- CityWeather
+CitiesWeather*-- Clouds
+CitiesWeather*-- Coord
+CitiesWeather*-- Main
+CitiesWeather*-- Weather
+CitiesWeather*-- Wind
+CoordWeather*-- Clouds
+CoordWeather*-- Coord
+CoordWeather*-- Main
+CoordWeather*-- Sys
+CoordWeather*-- Weather
+CoordWeather*-- Wind
+CitiesWeatherAdapter*.. MyCitiesWeatherViewHolder
+WeatherForeCastFragment*.. CitiesWeatherAdapter
+UserCityWeatherAdapter*.. myUserCityWeatherViewHolder
+UserWeatherForecastFragment*.. UserCityWeatherAdapter
+SimpleApi<|-- CitiesWeather
+SimpleApi<|-- CoordWeather
+RetrofitInstace*-- SimpleApi
+Repository<|-- RetrofitInstace
+MainViewModel-- Repository
+MainViewModelFactory*.. MainViewModel
+UserWeatherForecastFragment*.. MainViewModelFactory
+UserWeatherForecastFragment-- MainViewModel
+cityWeatherFragment-- UserWeatherForecastFragment
+UserDatabase*.. UserCityWeather
+UserDatabase*.. UserDao
+UserRepository<|-- UserDao
+UserCityWeatherViewModel-- UserDao
+UserCityWeatherViewModel*.. UserRepository
+UserWeatherForecastFragment*.. UserCityWeatherViewModel
+MainActivity-- UserWeatherForecastFragment
+MainActivity-- CityWeatherFragment
+MainActivity-- UserCityWeatherAdapter
+Constants-- RetrofitInstace :Association
+cityWeatherFragment-- WeatherForeCastFragment: Association
+
+
+class CitiesWeather {
+== data class ==
++calctime: Double
++Int: cnt
++Int: cod
++list: list<CityWeather>
+}
+
+class CityWeather {
+== data class ==
++clouds: Clouds
++coord: Coord
++dt: Int
++id: Int
++main: Main
++name: string
++rain: Any
++snow: Any
++visibility: Int
++ weather: List<Weather>
++wind: Wind
+}
+
+class Clouds {
+== data class ==
++ today: Int
+}
+
+class Coord {
+== data class ==
++Lat: Double
++Lon: Double
+}
+
+class Main {
+== data class ==
++feels_like: Double,
++grnd_level: Int,
++humidity: Int,
++pressure: Int,
++sea_level: Int,
++temp: Double,
++temp_max: Double,
++temp_min: Double
+}
+
+class Weather{
+== data class ==
++description: string
++icon: string
++id: Int
++main: String
+}
+
+class Wind{
+== data class ==
++deg: Int,
++speed: Double
+}
+
+class CoordWeather<<cloud>>{
+== data class ==
++base: String,
++clouds: Clouds,
++cod: Int,
++coord: Coord,
++dt: Int,
++id: Int,
++main: Main,
++name: String,
++sys: Sys,
++timezone: Int,
++visibility: Int,
++weather: List<Weather>,
++wind: Wind
+}
+
+class Clouds{
+== data class ==
++all: Int
+}
+
+class Coord{
+== data class ==
++lat: Int,
++lon: Int
+}
+
+class Main{
+== data class ==
++feels_like: Double,
++humidity: Int,
++pressure: Int,
++temp: Double,
++temp_max: Double,
++temp_min: Double
+}
+
+class Sys{
+== data class ==
++country: String,
++id: Int,
++sunrise: Int,
++sunset: Int,
++type: Int
+}
+
+
+class Weather{
+== data class ==
++description: String,
++icon: String,
++id: Int,
++main: String
+}
+
+class Wind{
+== data class ==
++deg: Int,
++speed: Double
+}
+
+
+interface SimpleApi{
+
+#getWeather(): Response<CoordWeather>
+
+#getCitiesWeather(): Response<CitiesWeather>
+
+#getCityWeather(): String
+}
+
+class RetrofitInstace {
+
+== Delecare and Intializing the variables ==
+-retrofit: RetrofitBuilder()
+
++api: SimpleApi()
+}
+
+
+class CitiesWeatherAdapter{
+	-myCitiesWeatherList: List<CitiyWeather>
+
+    #onCreateViewHolder(): MyCitiesWeatherViewHolder
+
+    #onBindViewHolder()
+
+    #getItemCount(): Int
+
+    #setData()
+}
+
+class MyCitiesWeatherViewHolder {
+    #itemCityNameCard: TextView
+    #itemRainCard: TextView
+}
+
+class WeatherForeCastFragment {
+    -myCitiesWeatherAdapter: CitiesWeatherAdapter
+    -MyCitiesWeatherAdapter: CitiesWeatherAdapter
+
+    #onCreateView()
+
+    #onCreateOptionsMenu()
+
+    #onQueryTextSubmit()
+
+    #onQueryTextChange()
+
+    #getCityWeather()
+}
+
+
+class UserCityWeatherAdapter {
+    -myUserCityWeatherList: emptyList<UserCityWeatherForecast>
+
+    #fun onCreateViewHolder(): myUserCityWeatherViewHolder
+
+    #fun onBindViewHolder()
+
+    #fun getItemCount(): Int
+
+    #fun setData()
+}
+
+class myUserCityWeatherViewHolder {
+    #itemCityNameUserCard: TextView
+}
+
+
+class UserWeatherForecastFragment {
+    -mUserCityWeatherViewModel: UserCityWeatherViewModel
+    #userCityWeatherAdapter: UserCityWeatherAdapter
+
+    #fun onCreateView()
+}
+
+
+class cityWeatherFragment {
+	-args: NavArgs<cityWeatherFragment>
+    -mUserCityWeatherViewModel: UserCityWeatherViewModel
+
+    #fun onCreateView()
+
+    #fun onCreateOptionsMenu()
+
+    #fun onOptionsItemSelected()
+}
+
+
+class Repository {
+
+#getWeather(): Response<CoordWeather>
+
+#getCitiesWeather(): Response<CitiesWeather>
+
+#getCityWeather(name: String): Response<CoordWeather>
+}
+
+class UserRepository {
+
+#readAllData: LiveData<List<UserCityWeather>>
+
+#fun addUserCityWeather(userCityWeather: UserCityWeather)
+
+#fun deleteUserCityWeather(userCityWeather: UserCityWeather)
+
+}
+
+interface UserDao {
+
+#readAllData(): LiveData<List<UserCityWeather>>
+
+#addUserCityWeather(userCityWeather: UserCityWeather)
+
+#deleteUserCityWeather(userCityWeather: UserCityWeather)
+}
+
+abstract class UserDatabase {
+
+-INSTANCE: UserDatabase?
+
+#fun userDao(): UserDao
+
+#getDatabase(context: Context): UserDatabase
+}
+
+class UserCityWeather<<database>> {
+== data class ==
+#id: Int,
+#cityName: String
+}
+
+class Constants {
++BASE_URL: String
+}
+
+class MainViewModel{
+
+#myResponse: MutableLiveData<Response<CoordWeather>>
+
+#myCitiesWeather: MutableLiveData<Response<CitiesWeather>>
+
+#myCityWeather: MutableLiveData<Response<CoordWeather>>
+
+#getWeather()
+
+#getCitiesWeather()
+
+#getCityWeather(name: String)
+
+}
+
+class UserCityWeatherViewModel {
+
+#val readAllData: LiveData<List<UserCityWeather>>
+-val repository: UserRepository
+
+#addUserCityWeather(userCityWeather: UserCityWeather)
+
+#deleteUserCityWeather(userCityWeather: UserCityWeather)
+}
+
+
+
+class MainViewModelFactory
+{
+#<T : ViewModel?> create(modelClass: Class<T>): T
+}
+
+
+class MainActivity{
+
+#onCreate(savedInstanceState: Bundle?)
+
+#onSupportNavigateUp(): Boolean
+}
+
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+
+[WeatherForeCastFragment] as WFCF
+
+() "HTTP" as HTTP
+
+[Web Server] as WS
+
+[API] as API
+
+[CitiesModel] as CitiesModel
+
+[Repository] as R
+
+[MainViewModel] as MVM
+
+[MainViewModelFactory] as MVMF
+
+
+WFCF --> MVMF: Create
+
+MVMF --> MVM :Create
+
+
+API --> HTTP: use
+
+HTTP --> WS :Retrieve
+
+CitiesModel --> API  :store data
+
+MVM --> R: use
+
+R --> CitiesModel: use
+
+@enduml

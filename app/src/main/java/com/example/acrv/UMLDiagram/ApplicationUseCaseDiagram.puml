@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+:User: as U
+:WeatherForecaster: as Dev
+
+
+package WeatherForecasterApp {
+  usecase "See Cities Weather" as UC1
+  usecase "Adding City Weather" as UC2
+  usecase "Seeing Personal City Weather" as UC3
+  usecase "Removing Personal City Weather" as UC4
+  usecase "Search Selected City" as UC5
+  usecase "Verify Entered City Name" as UC6
+  usecase "Can not find the city" as UC7
+  usecase "Select City Weather" as UC8
+  usecase "Peronsal City Weather Display Page" as PersonalFragment
+  usecase "CitiesWeatherPage" as CitiesWeatherFragment
+  usecase "CityWeatherFragment" as CityWeatherFragment
+
+}
+U -- UC4
+U -- UC1
+U -- UC2
+U -- UC3
+U -- UC5
+U -- UC8
+UC5 --> UC6
+UC5 ..> UC7
+Dev -- CitiesWeatherFragment
+UC3 <|-- PersonalFragment
+UC4 <|--PersonalFragment
+UC2 <|--PersonalFragment
+UC1 <|-- CitiesWeatherFragment
+UC6 <|-- CityWeatherFragment
+UC8 <|-- CityWeatherFragment
+
+
+@enduml

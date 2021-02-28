@@ -33,5 +33,4 @@ class UserCityWeatherViewModel(application: Application): AndroidViewModel(appli
             repository.deleteUserCityWeather(userCityWeather)
         }
     }
-
 }

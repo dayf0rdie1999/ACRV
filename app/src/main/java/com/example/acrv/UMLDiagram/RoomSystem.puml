@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+
+[UserWeatherForecastFragment] as WFCF
+
+() "Data Access Object" as Dao
+
+database User_Database {
+	[UserCityModel] as UCM
+}
+
+[UserWeatherForecastFragment] as WFCF
+
+[UserRepository] as UR
+
+[UserCityWeatherViewModel] as UCWVM
+
+WFCF <-- UCWVM :Store
+
+UCWVM <-- UR: Transit
+
+UR <-- Dao: Use
+
+UCM <-- Dao
+
+@enduml

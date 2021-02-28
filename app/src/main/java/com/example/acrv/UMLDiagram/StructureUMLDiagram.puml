@@ -1,0 +1,21 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+
+package Fragments{
+	[WeatherForeCastFragment] as WFCF
+	[UserCityWeatherForeCastFragment] as UCWFCF
+
+}
+
+database SQLite3 as DB {
+	[CityInformation] as CI
+}
+
+[Web Server] as WS
+
+WFCF ..> WS : use
+UCWFCF ..> WS : use
+UCWFCF ..> CI: use
+
+@enduml
