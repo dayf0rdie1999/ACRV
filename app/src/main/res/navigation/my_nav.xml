@@ -24,7 +24,12 @@
         tools:layout="@layout/fragment_user_weather_forecast" >
         <action
             android:id="@+id/action_userWeatherForecastFragment_to_weatherForeCastFragment"
-            app:destination="@id/weatherForeCastFragment" />
+            app:destination="@id/weatherForeCastFragment"
+            app:popUpTo="@id/weatherForeCastFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_userWeatherForecastFragment_to_userCityDetailWeatherFragment"
+            app:destination="@id/userCityDetailWeatherFragment" />
     </fragment>
     <fragment
         android:id="@+id/cityWeatherFragment"
@@ -36,6 +41,20 @@
             app:argType="com.example.acrv.modelpackage.citiesmodel.CityWeather" />
         <action
             android:id="@+id/action_cityWeatherFragment_to_weatherForeCastFragment"
-            app:destination="@id/weatherForeCastFragment" />
+            app:destination="@id/weatherForeCastFragment"
+            app:popUpTo="@id/weatherForeCastFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/userCityDetailWeatherFragment"
+        android:name="com.example.acrv.fragments.UserCityDetailWeatherFragment"
+        android:label="City Weather">
+        <action
+            android:id="@+id/action_userCityDetailWeatherFragment_to_userWeatherForecastFragment"
+            app:destination="@id/userWeatherForecastFragment"
+            app:popUpTo="@id/userWeatherForecastFragment" />
+        <argument
+            android:name="userCityWeatherData"
+            app:argType="com.example.acrv.roomModel.UserCityWeather" />
     </fragment>
 </navigation>

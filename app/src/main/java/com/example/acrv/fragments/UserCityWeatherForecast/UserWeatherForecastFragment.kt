@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acrv.R
 import com.example.acrv.fragments.UserCityWeatherForecast.UserCityWeatherAdapter
+import com.example.acrv.modelpackage.model.CoordWeather
 import com.example.acrv.repository.Repository
 import com.example.acrv.viewmodel.MainViewModel
 import com.example.acrv.viewmodel.UserCityWeatherViewModel
@@ -24,6 +26,12 @@ class userWeatherForecastFragment : Fragment() {
     val userCityWeatherAdapter by lazy {
         UserCityWeatherAdapter()
     }
+    private lateinit var mMainViewModel: MainViewModel
+    private lateinit var mMainViewModelFactory: MainViewModelFactory
+    val repositoy by lazy {
+        Repository()
+    }
+    private lateinit var UserCityWeatherList: MutableList<CoordWeather>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,10 +46,16 @@ class userWeatherForecastFragment : Fragment() {
         recyclerView.adapter = userCityWeatherAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity().applicationContext)
 
+        // Initializing the MainViewModel
+        mMainViewModelFactory = MainViewModelFactory(repositoy)
+        mMainViewModel = ViewModelProvider(this,mMainViewModelFactory).get(MainViewModel::class.java)
+
+
+        //Initializing the mUserCityWeatherViewModel
         mUserCityWeatherViewModel = ViewModelProvider(this).get(UserCityWeatherViewModel::class.java)
 
-        mUserCityWeatherViewModel.readAllData.observe(viewLifecycleOwner, {
-            userCityWeatherAdapter.setData(it)
+        mUserCityWeatherViewModel.readAllData.observe(viewLifecycleOwner, { list ->
+           userCityWeatherAdapter.setData(list)
         })
 
 

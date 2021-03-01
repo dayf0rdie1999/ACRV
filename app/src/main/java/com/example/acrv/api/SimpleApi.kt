@@ -5,6 +5,7 @@ import com.example.acrv.modelpackage.model.CoordWeather
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface SimpleApi {
 
@@ -15,9 +16,10 @@ interface SimpleApi {
     @GET("data/2.5/box/city?bbox=-83,25,-79,30,10&appid=0b636a698686b7998b1705da6012620c")
     suspend fun getCitiesWeather(): Response<CitiesWeather>
 
-    @GET("api.openweathermap.org/data/2.5/weather?q={cityName}&&appid=0b636a698686b7998b1705da6012620c")
+    @GET("data/2.5/weather")
     suspend fun getCityWeather(
-        @Path("cityName") name: String
+        @Query("q") name: String,
+        @Query("appid") key: String
     ):Response<CoordWeather>
 
 }

@@ -126,5 +126,4 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
             }
         })
     }
-
 }

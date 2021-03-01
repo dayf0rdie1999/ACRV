@@ -3,6 +3,7 @@ package com.example.acrv.repository
 import com.example.acrv.api.RetrofitInstance
 import com.example.acrv.modelpackage.citiesmodel.CitiesWeather
 import com.example.acrv.modelpackage.model.CoordWeather
+import com.example.acrv.util.Constants
 import retrofit2.Response
 
 class Repository {
@@ -18,7 +19,7 @@ class Repository {
 
     // Creating a function to implement the Interface from simpleApi
     suspend fun getCityWeather(name: String): Response<CoordWeather> {
-        return RetrofitInstance.api.getCityWeather(name)
+        return RetrofitInstance.api.getCityWeather(name, Constants.KEY)
     }
 
 }

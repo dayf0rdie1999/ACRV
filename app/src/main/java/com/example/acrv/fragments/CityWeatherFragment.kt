@@ -47,11 +47,13 @@ class cityWeatherFragment : Fragment() {
         return view
     }
 
+    // Override function to create the menu options bar
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.add_user_city_weather,menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    // Overriding the function to trigger action when is clicked on the menuItem
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.addUserCityWeather -> {

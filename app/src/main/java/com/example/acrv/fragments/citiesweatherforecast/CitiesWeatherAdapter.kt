@@ -34,6 +34,7 @@ class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWe
     override fun onBindViewHolder(holder: MyCitiesWeatherViewHoler, position: Int) {
 
         holder.itemCityNameCard.text = myCitiesWeatherList[position].name.toString()
+
         if (myCitiesWeatherList[position].rain == null){
             holder.itemRainCard.text = "No Rain"
         } else {
