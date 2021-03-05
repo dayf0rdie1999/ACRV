@@ -3,10 +3,11 @@ package com.example.acrv.roomData
 import android.content.Context
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.example.acrv.roomModel.CitiesModel
 import com.example.acrv.roomModel.UserCityWeather
 
 
-@Database(entities = [UserCityWeather::class],version = 1,exportSchema = false)
+@Database(entities = [UserCityWeather::class, CitiesModel::class],version = 2,exportSchema = false)
 abstract class UserDatabase: RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -26,7 +27,9 @@ abstract class UserDatabase: RoomDatabase() {
                     context.applicationContext,
                     UserDatabase::class.java,
                     "user_database"
-                ).build()
+                )
+                        .fallbackToDestructiveMigration()
+                        .build()
                 INSTANCE = instance
                 return instance
             }

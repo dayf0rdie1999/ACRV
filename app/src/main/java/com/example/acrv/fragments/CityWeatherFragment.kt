@@ -1,6 +1,7 @@
 package com.example.acrv.fragments
 
 import android.os.Bundle
+import android.util.Log.d
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
@@ -19,6 +20,7 @@ class cityWeatherFragment : Fragment() {
     private val args by navArgs<cityWeatherFragmentArgs>()
 
     private lateinit var mUserCityWeatherViewModel: UserCityWeatherViewModel
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -31,15 +33,9 @@ class cityWeatherFragment : Fragment() {
         val cityName = view.findViewById<TextView>(R.id.cityNameCityFragment_tv)
         val rain = view.findViewById<TextView>(R.id.rainCityFragment_tv)
 
-
+        cityName.text = args.cityWeatherInformation.cityName
         // Changing the text
-        cityName.text = args.cityWeatherInformation.name
-
-        if (args.cityWeatherInformation.rain == null) {
-            rain.text = "No Rain"
-        }else {
-            rain.text = "Rain"
-        }
+        rain.text = args.cityWeatherInformation.rain
 
         // Adding menu options on the toolbar
         setHasOptionsMenu(true)
@@ -57,10 +53,29 @@ class cityWeatherFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.addUserCityWeather -> {
-                val userCityWeather = UserCityWeather(0, cityNameCityFragment_tv.text.toString())
-                mUserCityWeatherViewModel.addUserCityWeather(userCityWeather)
+                checkRepeatedCity()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    // Checking whether the data already contains the cityName
+    private fun checkRepeatedCity(){
+        // Observing the data in the background
+        mUserCityWeatherViewModel.readAllData.observe(viewLifecycleOwner, { list ->
+            // Checking if the list is empty, it it is, we add the first item.
+            if (list.isNotEmpty()) {
+                // Find the object that that  has the same name
+                var city  = list.find{it.cityName == cityNameCityFragment_tv.text}
+                // if it is null add to it
+                if (city == null) addingCityToUserDatabase()
+            } else addingCityToUserDatabase()
+        })
+    }
+
+    private fun addingCityToUserDatabase() {
+        var userCityWeather = UserCityWeather(0, cityNameCityFragment_tv.text.toString(),rainCityFragment_tv.text.toString())
+        // Checking if the city is already existed in the user list
+        mUserCityWeatherViewModel.addUserCityWeather(userCityWeather)
     }
 }

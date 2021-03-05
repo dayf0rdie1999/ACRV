@@ -21,9 +21,8 @@ class UserCityDetailWeatherFragment : Fragment() {
 
     // Applying safeArgs to pass the data safely without leak
     private val args by navArgs<UserCityDetailWeatherFragmentArgs>()
-    // declare without intializing the variables
-    private lateinit var mMainViewModel: MainViewModel
-    private lateinit var mMainViewModelFactory: MainViewModelFactory
+
+
     // Declare and initialize using lazy high order functions
     val repository by lazy {
         Repository()
@@ -40,22 +39,9 @@ class UserCityDetailWeatherFragment : Fragment() {
         val cityName = view.findViewById<TextView>(R.id.userDetailCityName_tv)
         val cityWeather = view.findViewById<TextView>(R.id.userDetailCityWeather_tv)
 
-        // Initializing
-        mMainViewModelFactory = MainViewModelFactory(repository)
-        mMainViewModel = ViewModelProvider(this,mMainViewModelFactory).get(MainViewModel::class.java)
+        cityName.text = args.userCityWeatherData.cityName
+        cityWeather.text = args.userCityWeatherData.rain
 
-        // Retrieving the data from the webserver
-        mMainViewModel.getCityWeather(args.userCityWeatherData.cityName)
-
-        mMainViewModel.myCityWeather.observe(viewLifecycleOwner,{ response ->
-            if (response.isSuccessful) {
-                cityName.text = response?.body()!!.name
-                cityWeather.text = response?.body()!!.weather[0].main
-            } else {
-                cityName.text = response?.raw().toString()
-                d("URL",response?.raw().toString() )
-            }
-        })
 
         //Telling the toolbar there will be a menu item
         setHasOptionsMenu(true)
@@ -84,12 +70,12 @@ class UserCityDetailWeatherFragment : Fragment() {
                     list.filter {
                         it.cityName == args.userCityWeatherData.cityName
                     }
-                            /*** Let is a higher order functions to allow to perform action with
-                            // the element in the data ***/
-                        .let {
-                            mUserCityWeatherViewModel.deleteUserCityWeather(list[0])
-                            findNavController().navigateUp()
-                        }
+                    /*** Let is a higher order functions to allow to perform action with
+                    // the element in the data ***/
+                    .let {
+                        mUserCityWeatherViewModel.deleteUserCityWeather(it[0])
+                        findNavController().navigateUp()
+                    }
                 })
 
         }

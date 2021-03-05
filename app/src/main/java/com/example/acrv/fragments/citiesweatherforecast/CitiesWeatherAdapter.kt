@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.acrv.R
 import com.example.acrv.fragments.weatherForeCastFragmentDirections
 import com.example.acrv.modelpackage.citiesmodel.CityWeather
+import com.example.acrv.roomModel.CitiesModel
 
 class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWeatherViewHoler>() {
 
-    private var myCitiesWeatherList = emptyList<CityWeather>()
-
+    private var myCitiesWeatherList = emptyList<CitiesModel>()
 
     inner class MyCitiesWeatherViewHoler(itemView: View): RecyclerView.ViewHolder(itemView) {
         var itemCityNameCard: TextView
@@ -33,14 +33,9 @@ class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWe
 
     override fun onBindViewHolder(holder: MyCitiesWeatherViewHoler, position: Int) {
 
-        holder.itemCityNameCard.text = myCitiesWeatherList[position].name.toString()
+        holder.itemCityNameCard.text = myCitiesWeatherList[position].cityName
 
-        if (myCitiesWeatherList[position].rain == null){
-            holder.itemRainCard.text = "No Rain"
-        } else {
-            holder.itemRainCard.text = "Rain"
-        }
-
+        holder.itemRainCard.text = myCitiesWeatherList[position].rain
 
         holder.itemView.setOnClickListener {
             val action = weatherForeCastFragmentDirections.actionWeatherForeCastFragmentToCityWeatherFragment(myCitiesWeatherList[position])
@@ -52,8 +47,8 @@ class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWe
         return myCitiesWeatherList.size
     }
 
-    fun setData(newList: List<CityWeather>) {
-        myCitiesWeatherList = newList;
+    fun setData(newCityWeatherList: List<CitiesModel>) {
+        myCitiesWeatherList = newCityWeatherList
         notifyDataSetChanged()
     }
 

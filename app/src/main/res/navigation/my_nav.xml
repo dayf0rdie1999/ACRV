@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_city_weather" >
         <argument
             android:name="cityWeatherInformation"
-            app:argType="com.example.acrv.modelpackage.citiesmodel.CityWeather" />
+            app:argType="com.example.acrv.roomModel.CitiesModel" />
         <action
             android:id="@+id/action_cityWeatherFragment_to_weatherForeCastFragment"
             app:destination="@id/weatherForeCastFragment"

@@ -3,6 +3,7 @@ package com.example.acrv.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.acrv.repository.UserRepository
 import com.example.acrv.roomData.UserDatabase
@@ -13,12 +14,12 @@ class UserCityWeatherViewModel(application: Application): AndroidViewModel(appli
 
     val readAllData: LiveData<List<UserCityWeather>>
     private val repository: UserRepository
-
+    lateinit var searchedUserCity: LiveData<List<UserCityWeather>>
 
     init {
         val userDao = UserDatabase.getDatabase(application).userDao()
         repository = UserRepository(userDao)
-        readAllData = repository.readAllData
+        readAllData = repository.readAllData.asLiveData()
     }
 
 
@@ -33,4 +34,9 @@ class UserCityWeatherViewModel(application: Application): AndroidViewModel(appli
             repository.deleteUserCityWeather(userCityWeather)
         }
     }
+
+    fun searchDatabase(searchedQuery: String): LiveData<List<UserCityWeather>>{
+        return repository.searchDatabase(searchedQuery).asLiveData()
+    }
+
 }
