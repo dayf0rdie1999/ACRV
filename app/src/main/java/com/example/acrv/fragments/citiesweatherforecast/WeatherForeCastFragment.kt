@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acrv.R
+import com.example.acrv.databinding.FragmentWeatherForeCastBinding
 import com.example.acrv.fragments.citiesweatherforecast.CitiesWeatherAdapter
 import com.example.acrv.modelpackage.citiesmodel.CityWeather
 import com.example.acrv.repository.Repository
@@ -30,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
 
+    private lateinit var binding: FragmentWeatherForeCastBinding
     // declare the variable for everywhere in the class to access
     private lateinit var mainViewModel: MainViewModel
     private lateinit var mCitiesModelViewModel: CityModelViewModel
@@ -45,15 +47,11 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_weather_fore_cast, container, false)
-
-        // Binding the floating button
-        val personalFloatingButton = view.findViewById<FloatingActionButton>(R.id.personalFragment_fbt)
+        binding = FragmentWeatherForeCastBinding.inflate(layoutInflater)
 
         // Creating a recylcerView
-        val recyclerView = view.findViewById<RecyclerView>(R.id.citiesWeather_RV)
-        recyclerView.adapter = myCitiesWeatherAdapter;
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity().applicationContext)
+        binding.citiesWeatherRV.adapter = myCitiesWeatherAdapter;
+        binding.citiesWeatherRV.layoutManager = LinearLayoutManager(requireActivity().applicationContext)
 
         // Initializing CitiesModelViewModel
         mCitiesModelViewModel = ViewModelProvider(this).get(CityModelViewModel::class.java)
@@ -90,11 +88,11 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
         setHasOptionsMenu(true)
 
         // Set on click listener of the floating button to navigate to different view
-        personalFloatingButton.setOnClickListener {
-            view.findNavController().navigate(R.id.userWeatherForecastFragment)
+        binding.personalFragmentFbt.setOnClickListener{
+            binding.root.findNavController().navigate(R.id.userWeatherForecastFragment)
         }
 
-        return view
+        return binding.root
 
     }
 
@@ -136,8 +134,6 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
-
     /**
      * onQueryTextSubmit() is a function that triggering certain action when the text being submitted
      * onQueryTetChange() is a function that triggering actions when the text is changing
@@ -168,5 +164,6 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
         mCitiesModelViewModel.citySearchModel(searchQuery).observe(viewLifecycleOwner,{
             myCitiesWeatherAdapter.setData(it)
         })
+
     }
 }

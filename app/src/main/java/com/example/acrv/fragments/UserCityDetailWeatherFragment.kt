@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.acrv.R
+import com.example.acrv.databinding.FragmentUserCityDetailWeatherBinding
 import com.example.acrv.repository.Repository
 import com.example.acrv.repository.UserRepository
 import com.example.acrv.viewmodel.MainViewModel
@@ -19,9 +20,10 @@ import com.example.acrv.viewmodelfactory.MainViewModelFactory
 
 class UserCityDetailWeatherFragment : Fragment() {
 
+
+    private lateinit var binding: FragmentUserCityDetailWeatherBinding
     // Applying safeArgs to pass the data safely without leak
     private val args by navArgs<UserCityDetailWeatherFragmentArgs>()
-
 
     // Declare and initialize using lazy high order functions
     val repository by lazy {
@@ -35,12 +37,11 @@ class UserCityDetailWeatherFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_user_city_detail_weather, container, false)
-        val cityName = view.findViewById<TextView>(R.id.userDetailCityName_tv)
-        val cityWeather = view.findViewById<TextView>(R.id.userDetailCityWeather_tv)
+        binding = FragmentUserCityDetailWeatherBinding.inflate(layoutInflater)
 
-        cityName.text = args.userCityWeatherData.cityName
-        cityWeather.text = args.userCityWeatherData.rain
+
+        binding.userDetailCityNameTv.text = args.userCityWeatherData.cityName
+        binding.userDetailCityWeatherTv.text = args.userCityWeatherData.rain
 
 
         //Telling the toolbar there will be a menu item
@@ -49,7 +50,7 @@ class UserCityDetailWeatherFragment : Fragment() {
         //Initializing UserCityWeatherViewModel
         mUserCityWeatherViewModel = ViewModelProvider(this).get(UserCityWeatherViewModel::class.java)
 
-        return view
+        return binding.root
     }
 
     // Overriding the function of creating the optionsbar to manually input the menu created
@@ -64,22 +65,25 @@ class UserCityDetailWeatherFragment : Fragment() {
         // Applying When Case to identify which item is selected
         when(item.itemId){
             // Observing the data in the background method
-            R.id.cityDetailRemove_menuItem -> mUserCityWeatherViewModel.readAllData
-                .observe(viewLifecycleOwner,{list ->
-                    // Filtering the list which means loop and if conditions
-                    list.filter {
-                        it.cityName == args.userCityWeatherData.cityName
-                    }
+            R.id.cityDetailRemove_menuItem -> deleteUserCityWeather()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteUserCityWeather() {
+        mUserCityWeatherViewModel.readAllData
+            .observe(viewLifecycleOwner,{list ->
+                // Filtering the list which means loop and if conditions
+                list.filter {
+                    it.cityName == args.userCityWeatherData.cityName
+                }
                     /*** Let is a higher order functions to allow to perform action with
                     // the element in the data ***/
                     .let {
                         mUserCityWeatherViewModel.deleteUserCityWeather(it[0])
                         findNavController().navigateUp()
                     }
-                })
-
-        }
-
-        return super.onOptionsItemSelected(item)
+            })
     }
 }

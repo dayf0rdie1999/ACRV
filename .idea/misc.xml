@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.23007246376811594" />
         <entry key="app/src/main/res/layout/card_layout_row.xml" value="0.16576086956521738" />
         <entry key="app/src/main/res/layout/cities_weather_custom_row.xml" value="0.16576086956521738" />
+        <entry key="app/src/main/res/layout/fragment_city_weather.xml" value="0.23007246376811594" />
         <entry key="app/src/main/res/layout/fragment_user_city_detail_weather.xml" value="0.22780797101449277" />
+        <entry key="app/src/main/res/layout/fragment_weather_fore_cast.xml" value="0.2578125" />
         <entry key="app/src/main/res/layout/user_card_layout_row.xml" value="0.16576086956521738" />
         <entry key="app/src/main/res/menu/user_city_detail_weather_fragment_menu.xml" value="0.13703703703703704" />
       </map>

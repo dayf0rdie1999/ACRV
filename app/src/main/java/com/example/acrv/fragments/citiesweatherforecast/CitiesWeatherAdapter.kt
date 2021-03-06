@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acrv.R
+import com.example.acrv.databinding.CardLayoutRowBinding
 import com.example.acrv.fragments.weatherForeCastFragmentDirections
 import com.example.acrv.modelpackage.citiesmodel.CityWeather
 import com.example.acrv.roomModel.CitiesModel
@@ -15,27 +16,18 @@ class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWe
 
     private var myCitiesWeatherList = emptyList<CitiesModel>()
 
-    inner class MyCitiesWeatherViewHoler(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var itemCityNameCard: TextView
-        var itemRainCard: TextView
-
-        init {
-            itemCityNameCard = itemView.findViewById<TextView>(R.id.cityNameCard_tv)
-            itemRainCard = itemView.findViewById<TextView>(R.id.rainCard_tv)
-
-
-        }
+    inner class MyCitiesWeatherViewHoler(val binding: CardLayoutRowBinding): RecyclerView.ViewHolder(binding.root) {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyCitiesWeatherViewHoler {
-        return MyCitiesWeatherViewHoler(LayoutInflater.from(parent.context).inflate(R.layout.card_layout_row, parent, false))
+        return MyCitiesWeatherViewHoler(CardLayoutRowBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: MyCitiesWeatherViewHoler, position: Int) {
 
-        holder.itemCityNameCard.text = myCitiesWeatherList[position].cityName
+        holder.binding.cityNameCardTv.text = myCitiesWeatherList[position].cityName
 
-        holder.itemRainCard.text = myCitiesWeatherList[position].rain
+        holder.binding.rainCardTv.text = myCitiesWeatherList[position].rain
 
         holder.itemView.setOnClickListener {
             val action = weatherForeCastFragmentDirections.actionWeatherForeCastFragmentToCityWeatherFragment(myCitiesWeatherList[position])
