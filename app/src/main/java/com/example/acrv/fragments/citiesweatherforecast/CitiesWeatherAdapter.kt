@@ -26,8 +26,14 @@ class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWe
     override fun onBindViewHolder(holder: MyCitiesWeatherViewHoler, position: Int) {
 
         holder.binding.cityNameCardTv.text = myCitiesWeatherList[position].cityName
+        holder.binding.cityNameCardTv.alpha = 1F
 
-        holder.binding.rainCardTv.text = myCitiesWeatherList[position].rain
+        if (myCitiesWeatherList[position].rain == "Rain"){
+            holder.binding.cityRainCardIV.setImageResource(R.drawable.ic_icon_weather_rain_mix)
+        } else {
+            holder.binding.cityRainCardIV.setImageResource(R.drawable.ic_sun)
+        }
+
 
         holder.itemView.setOnClickListener {
             val action = weatherForeCastFragmentDirections.actionWeatherForeCastFragmentToCityWeatherFragment(myCitiesWeatherList[position])

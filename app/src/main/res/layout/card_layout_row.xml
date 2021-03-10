@@ -4,40 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="#3F51B5"
-    app:cardCornerRadius="16dp"
-    app:contentPadding="5dp"
-    app:cardElevation="15dp"
-    android:layout_marginVertical="30dp"
+    app:contentPaddingBottom="20dp"
+    app:cardElevation="20dp"
+    android:alpha="0.5"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="16dp">
+        android:paddingVertical="16dp"
+        android:background="@drawable/card_view"
+        >
 
         <TextView
             android:id="@+id/cityNameCard_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginLeft="16dp"
+            android:fontFamily="@font/roboto_medium"
             android:text="City Name"
             android:textSize="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/rainCard_tv"
+        <ImageView
+            android:id="@+id/cityRainCard_IV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="64dp"
-            android:text="Rain"
-            android:textSize="24dp"
+            android:layout_marginEnd="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_sun" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -20,6 +20,7 @@ class UserCityWeatherAdapter: RecyclerView.Adapter<UserCityWeatherAdapter.myUser
     override fun onBindViewHolder(holder: myUserCityWeatherViewHolder, position: Int) {
         holder.binding.userCityWeatherNameTv.text = myUserCityWeatherList[position].cityName
 
+
         holder.binding.root.setOnClickListener {
             val action = userWeatherForecastFragmentDirections.actionUserWeatherForecastFragmentToUserCityDetailWeatherFragment(myUserCityWeatherList[position])
             it.findNavController().navigate(action)
