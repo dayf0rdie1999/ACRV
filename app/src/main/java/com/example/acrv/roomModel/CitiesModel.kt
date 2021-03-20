@@ -12,5 +12,6 @@ data class CitiesModel(
         @PrimaryKey(autoGenerate = true)
         val id: Int,
         val cityName: String,
-        val rain: String
+        val rain: String,
+        val hours: String
 ):Parcelable

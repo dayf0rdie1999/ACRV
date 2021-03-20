@@ -3,10 +3,13 @@ package com.example.acrv.fragments.UserCityWeatherForecast
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acrv.databinding.UserCardLayoutRowBinding
 import com.example.acrv.fragments.userWeatherForecastFragmentDirections
 import com.example.acrv.roomModel.UserCityWeather
+import com.example.acrv.util.UserCityDiffUtil
+
 class UserCityWeatherAdapter: RecyclerView.Adapter<UserCityWeatherAdapter.myUserCityWeatherViewHolder>() {
 
     private var myUserCityWeatherList = emptyList<UserCityWeather>()
@@ -31,8 +34,11 @@ class UserCityWeatherAdapter: RecyclerView.Adapter<UserCityWeatherAdapter.myUser
         return myUserCityWeatherList.size
     }
 
-    fun setData(myCityWeatherList: List<UserCityWeather>){
-        myUserCityWeatherList = myCityWeatherList
-        notifyDataSetChanged()
+    fun setData(newMyCityWeatherList: List<UserCityWeather>){
+        val diffUtil = UserCityDiffUtil(myUserCityWeatherList,newMyCityWeatherList)
+        val diffResult = DiffUtil.calculateDiff(diffUtil);
+        myUserCityWeatherList = newMyCityWeatherList
+
+        diffResult.dispatchUpdatesTo(this)
     }
 }

@@ -43,4 +43,8 @@ class UserRepository(private val userDao: UserDao) {
         return userDao.citiesSearchDatabase(searchQuery)
     }
 
+    suspend fun deleteCitiesData(){
+        userDao.deleteCitiesData()
+    }
+
 }

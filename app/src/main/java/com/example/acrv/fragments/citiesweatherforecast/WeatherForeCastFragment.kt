@@ -1,23 +1,14 @@
 package com.example.acrv.fragments
 
-import android.app.SearchManager
-import android.content.Context
-import android.database.Cursor
 import android.os.Bundle
-import android.util.Log.d
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.CursorAdapter
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.compose.ui.node.getOrAddAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.acrv.R
 import com.example.acrv.databinding.FragmentWeatherForeCastBinding
 import com.example.acrv.fragments.citiesweatherforecast.CitiesWeatherAdapter
@@ -27,7 +18,8 @@ import com.example.acrv.roomModel.CitiesModel
 import com.example.acrv.viewmodel.CityModelViewModel
 import com.example.acrv.viewmodel.MainViewModel
 import com.example.acrv.viewmodelfactory.MainViewModelFactory
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.time.LocalTime
+import java.util.*
 
 class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
 
@@ -62,23 +54,21 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
         // Initializing the factory and viewmodel to implement the calling equations as background
         val viewModelFactory = MainViewModelFactory(repository)
         mainViewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
+
+        // Setting the timer to run every 60 mintues
         mainViewModel.getCitiesWeather()
 
-
         // Observing the data when the object at background
-
         mainViewModel.myCitiesWeather.observe(viewLifecycleOwner, Observer{
-            response ->
+                response ->
             if (response.isSuccessful) {
                 response.body()?.list!!.let {
                     insertCityNameToDatabase(it)
-
                 }
             } else {
                 Toast.makeText(requireActivity().applicationContext,"${response.code()} Can't find the city", Toast.LENGTH_LONG)
             }
         })
-
 
         mCitiesModelViewModel.readAllCityNameData.observe(viewLifecycleOwner,{ CitiesModelList ->
             myCitiesWeatherAdapter.setData(CitiesModelList)
@@ -97,24 +87,29 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
     }
 
     /** Inserting Data into CitiesModel Once in application life cycle **/
-
     private fun insertCityNameToDatabase(Cities: List<CityWeather>) {
         // Observe the data
         mCitiesModelViewModel.readAllCityNameData.observe(viewLifecycleOwner,{
-            if (it.isEmpty()) {
-                Cities.forEach { city ->
-                    if (city.rain == null) {
-                        var city = CitiesModel(0, city.name, "No Rain")
-                        mCitiesModelViewModel.addCityModel(city)
-                    } else {
-                        var city = CitiesModel(0, city.name, "Rain")
-                        mCitiesModelViewModel.addCityModel(city)
-                    }
+            when {
+                it.isEmpty() -> {
+                    addCitiesToDatabase(Cities)
                 }
             }
         })
     }
 
+    private fun addCitiesToDatabase(Cities: List<CityWeather>) {
+        var currentTime = "${LocalTime.now().hour}:${LocalTime.now().minute}"
+        Cities.forEach { city ->
+            if (city.rain == null) {
+                var city = CitiesModel(0, city.name, "No Rain",currentTime)
+                mCitiesModelViewModel.addCityModel(city)
+            } else {
+                var city = CitiesModel(0, city.name, "Rain",currentTime)
+                mCitiesModelViewModel.addCityModel(city)
+            }
+        }
+    }
 
 
     // Override function to add the menu item onto the supportActionBar (toolbar)

@@ -30,6 +30,9 @@ interface UserDao {
     fun readAllCityData(): LiveData<List<CitiesModel>>
 
     @Query("SELECT * FROM cities_Name_table WHERE cityName LIKE :searchQuery")
-    fun  citiesSearchDatabase(searchQuery: String): Flow<List<CitiesModel>>
+    fun citiesSearchDatabase(searchQuery: String): Flow<List<CitiesModel>>
+
+    @Query("DELETE FROM cities_Name_table")
+    suspend fun deleteCitiesData()
 
 }
