@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/weatherForeCastFragment"
         android:name="com.example.acrv.fragments.weatherForeCastFragment"
-        android:label="Weather Forecast"
+        android:label=""
         tools:layout="@layout/fragment_weather_fore_cast" >
         <action
             android:id="@+id/action_weatherForeCastFragment_to_userWeatherForecastFragment"
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/userWeatherForecastFragment"
         android:name="com.example.acrv.fragments.userWeatherForecastFragment"
-        android:label="User Cities Weather"
+        android:label="Favorite Cities"
         tools:layout="@layout/fragment_user_weather_forecast" >
         <action
             android:id="@+id/action_userWeatherForecastFragment_to_weatherForeCastFragment"

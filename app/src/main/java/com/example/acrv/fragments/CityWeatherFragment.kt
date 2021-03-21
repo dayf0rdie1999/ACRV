@@ -34,8 +34,24 @@ class cityWeatherFragment : Fragment() {
 
 
         binding.cityNameCityFragmentTv.text = args.cityWeatherInformation.cityName
+        binding.currentTempTV.text = args.cityWeatherInformation.temp.toString()
+        binding.humidityTV.text = args.cityWeatherInformation.humidity.toString()
+        binding.maxTempTV.text = args.cityWeatherInformation.max_temp.toString()
+        binding.minTempTV.text = args.cityWeatherInformation.min_temp.toString()
+        binding.windSpeedCityTV.text = args.cityWeatherInformation.wind.toString()
+        when(args.cityWeatherInformation.weather) {
+            ("Clear") -> {
+                binding.cityWeatherConditionIconIV.setImageResource(R.drawable.ic_icon_sun)
+            }
+            ("Clouds") -> {
+                binding.cityWeatherConditionIconIV.setImageResource(R.drawable.ic_icon_cloud)
+            }
+            else -> {
+                binding.cityWeatherConditionIconIV.setImageResource(R.drawable.ic_icon_rain)
+            }
+        }
+
         // Changing the text
-        binding.rainCityFragmentTv.text = args.cityWeatherInformation.rain
 
         // Adding menu options on the toolbar
         setHasOptionsMenu(true)
@@ -74,7 +90,15 @@ class cityWeatherFragment : Fragment() {
     }
 
     private fun addingCityToUserDatabase() {
-        var userCityWeather = UserCityWeather(0, cityNameCityFragment_tv.text.toString(),rainCityFragment_tv.text.toString())
+        var userCityWeather = UserCityWeather(0, cityNameCityFragment_tv.text.toString(),
+            rain = args.cityWeatherInformation.rain,
+            weather = args.cityWeatherInformation.weather,
+            max_temp = args.cityWeatherInformation.max_temp,
+            min_temp = args.cityWeatherInformation.min_temp,
+            temp = args.cityWeatherInformation.temp,
+            humidity = args.cityWeatherInformation.humidity,
+            wind = args.cityWeatherInformation.wind
+            )
         // Checking if the city is already existed in the user list
         mUserCityWeatherViewModel.addUserCityWeather(userCityWeather)
     }

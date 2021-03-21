@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+package DataTransfer {
+
+    [HTTP] as HTTP
+    [SimpleApi] as SA
+    [repository] as R
+    [mainViewModel] as MVM
+
+
+    [userRepository] as UR
+    [UserDao] as UD
+    [Database] as DB
+
+
+    [Transfer Data Worker] as PTD
+
+    HTTP -> SA: Data Source
+    SA -> R : Wraping Interface
+    R -> MVM: get the data
+
+    MVM -> PTD: Transfer the data
+    PTD -> UR: pass the data
+
+    UR ->  UD : call insert data wrapper
+
+    UD -> DB: insert the data
+
+
+}
+
+
+@enduml

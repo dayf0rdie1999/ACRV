@@ -32,10 +32,13 @@ class CityModelViewModel(application: Application): AndroidViewModel(application
         return citiesRepository.citiesSearchDatabase(searchQuery).asLiveData()
     }
 
-    fun deleteCitiesModel() {
+    fun updateDatabase(cityModel: CitiesModel) {
         viewModelScope.launch {
-            citiesRepository.deleteCitiesData()
+            citiesRepository.updateDatabase(cityModel)
         }
     }
 
+    fun getDataSize(): Int {
+        return citiesRepository.getDataSize()
+    }
 }

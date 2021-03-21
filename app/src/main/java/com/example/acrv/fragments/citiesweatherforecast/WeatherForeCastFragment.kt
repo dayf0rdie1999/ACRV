@@ -3,23 +3,25 @@ package com.example.acrv.fragments
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.acrv.R
 import com.example.acrv.databinding.FragmentWeatherForeCastBinding
 import com.example.acrv.fragments.citiesweatherforecast.CitiesWeatherAdapter
-import com.example.acrv.modelpackage.citiesmodel.CityWeather
 import com.example.acrv.repository.Repository
-import com.example.acrv.roomModel.CitiesModel
 import com.example.acrv.viewmodel.CityModelViewModel
 import com.example.acrv.viewmodel.MainViewModel
+import com.example.acrv.Worker.UpdateWorker
+import com.example.acrv.Worker.UploadWorker
 import com.example.acrv.viewmodelfactory.MainViewModelFactory
-import java.time.LocalTime
-import java.util.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
 
@@ -28,11 +30,31 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var mCitiesModelViewModel: CityModelViewModel
 
+
+    private val repository by lazy {
+        Repository()
+    }
+
+    private val mainViewModelFactory by lazy {
+        MainViewModelFactory(repository)
+    }
+
     // Initializing the object using lazy
     private val myCitiesWeatherAdapter by lazy {
         CitiesWeatherAdapter()
     }
 
+
+    // Declare the WorkManager
+    val workManager: WorkManager by lazy {
+        WorkManager.getInstance(requireContext().applicationContext)
+    }
+
+    val updateWorker = PeriodicWorkRequestBuilder<UpdateWorker>(15, TimeUnit.MINUTES)
+        .build()
+
+    val uploadWorker = OneTimeWorkRequestBuilder<UploadWorker>()
+        .build()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,30 +67,23 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
         binding.citiesWeatherRV.adapter = myCitiesWeatherAdapter;
         binding.citiesWeatherRV.layoutManager = LinearLayoutManager(requireActivity().applicationContext)
 
+
         // Initializing CitiesModelViewModel
         mCitiesModelViewModel = ViewModelProvider(this).get(CityModelViewModel::class.java)
 
-        // Initializing repository class where all the function is created
-        val repository =  Repository()
 
-        // Initializing the factory and viewmodel to implement the calling equations as background
-        val viewModelFactory = MainViewModelFactory(repository)
-        mainViewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
+        /**
+         * Uploading the data to the database if the object hasn't been created
+         * Setting WorkManager to update the data every 15 Minutes
+         */
 
-        // Setting the timer to run every 60 mintues
-        mainViewModel.getCitiesWeather()
-
-        // Observing the data when the object at background
-        mainViewModel.myCitiesWeather.observe(viewLifecycleOwner, Observer{
-                response ->
-            if (response.isSuccessful) {
-                response.body()?.list!!.let {
-                    insertCityNameToDatabase(it)
-                }
-            } else {
-                Toast.makeText(requireActivity().applicationContext,"${response.code()} Can't find the city", Toast.LENGTH_LONG)
+        GlobalScope.launch {
+            if (mCitiesModelViewModel.getDataSize() == 0) {
+                workManager.enqueue(uploadWorker)
+            }else {
+                workManager.enqueue(updateWorker)
             }
-        })
+        }
 
         mCitiesModelViewModel.readAllCityNameData.observe(viewLifecycleOwner,{ CitiesModelList ->
             myCitiesWeatherAdapter.setData(CitiesModelList)
@@ -76,6 +91,7 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
 
         // Notify the mainActivity that we have optionsMenu
         setHasOptionsMenu(true)
+
 
         // Set on click listener of the floating button to navigate to different view
         binding.personalFragmentFbt.setOnClickListener{
@@ -86,37 +102,11 @@ class weatherForeCastFragment : Fragment(),SearchView.OnQueryTextListener {
 
     }
 
-    /** Inserting Data into CitiesModel Once in application life cycle **/
-    private fun insertCityNameToDatabase(Cities: List<CityWeather>) {
-        // Observe the data
-        mCitiesModelViewModel.readAllCityNameData.observe(viewLifecycleOwner,{
-            when {
-                it.isEmpty() -> {
-                    addCitiesToDatabase(Cities)
-                }
-            }
-        })
-    }
-
-    private fun addCitiesToDatabase(Cities: List<CityWeather>) {
-        var currentTime = "${LocalTime.now().hour}:${LocalTime.now().minute}"
-        Cities.forEach { city ->
-            if (city.rain == null) {
-                var city = CitiesModel(0, city.name, "No Rain",currentTime)
-                mCitiesModelViewModel.addCityModel(city)
-            } else {
-                var city = CitiesModel(0, city.name, "Rain",currentTime)
-                mCitiesModelViewModel.addCityModel(city)
-            }
-        }
-    }
-
 
     // Override function to add the menu item onto the supportActionBar (toolbar)
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         // Pre-create the menu item on the menu
         inflater.inflate(R.menu.search_cities_weather_forecast,menu)
-
         // binding the varible to the view
         val search = menu?.findItem(R.id.menu_search)
 

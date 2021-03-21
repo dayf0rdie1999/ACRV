@@ -5,12 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.acrv.R
 import com.example.acrv.databinding.CardLayoutRowBinding
 import com.example.acrv.fragments.weatherForeCastFragmentDirections
 import com.example.acrv.modelpackage.citiesmodel.CityWeather
 import com.example.acrv.roomModel.CitiesModel
+import com.example.acrv.util.CitiesModelDiffUtil
+import com.example.acrv.util.UserCityDiffUtil
 
 class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWeatherViewHoler>() {
 
@@ -29,9 +32,9 @@ class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWe
         holder.binding.cityNameCardTv.alpha = 1F
 
         if (myCitiesWeatherList[position].rain == "Rain"){
-            holder.binding.cityRainCardIV.setImageResource(R.drawable.ic_icon_weather_rain_mix)
+            holder.binding.cityRainCardIV.setImageResource(R.drawable.ic_icon_rain)
         } else {
-            holder.binding.cityRainCardIV.setImageResource(R.drawable.ic_sun)
+            holder.binding.cityRainCardIV.setImageResource(R.drawable.ic_icon_sun)
         }
 
 
@@ -46,8 +49,11 @@ class CitiesWeatherAdapter: RecyclerView.Adapter<CitiesWeatherAdapter.MyCitiesWe
     }
 
     fun setData(newCityWeatherList: List<CitiesModel>) {
+//        val diffUtil = CitiesModelDiffUtil(myCitiesWeatherList,newCityWeatherList)
+//        val diffResult = DiffUtil.calculateDiff(diffUtil);
         myCitiesWeatherList = newCityWeatherList
         notifyDataSetChanged()
+//        diffResult.dispatchUpdatesTo(this)
     }
 
 

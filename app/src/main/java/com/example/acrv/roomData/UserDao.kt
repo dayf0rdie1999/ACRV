@@ -11,18 +11,27 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UserDao {
 
+    /**
+     * Use City Weather Data Access Object
+     */
     @Query("SELECT * FROM user_cities_weather")
     fun readAllData(): Flow<List<UserCityWeather>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addUserCityWeather(userCityWeather: UserCityWeather)
 
-    @Delete
-    suspend fun deleteUserCityWeather(userCityWeather: UserCityWeather)
-
     @Query("SELECT * FROM user_cities_weather WHERE cityName LIKE :searchQuery")
     fun searchDatabase(searchQuery: String): Flow<List<UserCityWeather>>
 
+    @Delete
+    suspend fun deleteUserCityWeather(userCityWeather: UserCityWeather)
+
+    @Query("UPDATE user_cities_weather SET `temp` = :Temp,rain = :Rain, weather = :Weather, max_temp = :Max_Temp, min_temp = :Min_Temp, humidity= :Humidity, wind = :Wind WHERE cityName = :inputCityName")
+    suspend fun updateUserCityWeather(Rain: String,  Weather: String, Max_Temp: Double, Min_Temp: Double, Temp: Double, Humidity: Int, Wind: Double,inputCityName: String)
+
+    /**
+     * Cities Model Data Access Object
+     */
     @Insert
     suspend fun addCityModel(cityModel: CitiesModel)
 
@@ -32,7 +41,9 @@ interface UserDao {
     @Query("SELECT * FROM cities_Name_table WHERE cityName LIKE :searchQuery")
     fun citiesSearchDatabase(searchQuery: String): Flow<List<CitiesModel>>
 
-    @Query("DELETE FROM cities_Name_table")
-    suspend fun deleteCitiesData()
+    @Update
+    suspend fun updateCitiesModel(cityModel: CitiesModel)
 
+    @Query("SELECT COUNT(*) FROM cities_Name_table")
+    fun getDataSize(): Int
 }

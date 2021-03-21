@@ -11,5 +11,11 @@ data class UserCityWeather (
         @PrimaryKey(autoGenerate = true)
         val id: Int,
         val cityName: String,
-        val rain: String
+        val rain: String,
+        val weather: String,
+        val max_temp: Double,
+        val min_temp: Double,
+        val temp: Double,
+        val humidity: Int,
+        val wind: Double
 ):Parcelable

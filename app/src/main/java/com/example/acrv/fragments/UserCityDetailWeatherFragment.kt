@@ -40,8 +40,23 @@ class UserCityDetailWeatherFragment : Fragment() {
         binding = FragmentUserCityDetailWeatherBinding.inflate(layoutInflater)
 
 
-        binding.userDetailCityNameTv.text = args.userCityWeatherData.cityName
-        binding.userDetailCityWeatherTv.text = args.userCityWeatherData.rain
+        binding.userCityNameCityFragmentTv.text = args.userCityWeatherData.cityName
+        binding.userCurrentTempTV.text = args.userCityWeatherData.temp.toString()
+        binding.userHumidityTV.text = args.userCityWeatherData.humidity.toString()
+        binding.userMaxTempTV.text = args.userCityWeatherData.max_temp.toString()
+        binding.userMinTempTV.text = args.userCityWeatherData.min_temp.toString()
+        binding.userWindSpeedCityTV.text = args.userCityWeatherData.wind.toString()
+        when(args.userCityWeatherData.weather) {
+            ("Clear") -> {
+                binding.userCityWeatherConditionIconIV.setImageResource(R.drawable.ic_icon_sun)
+            }
+            ("Clouds") -> {
+                binding.userCityWeatherConditionIconIV.setImageResource(R.drawable.ic_icon_cloud)
+            }
+            else -> {
+                binding.userCityWeatherConditionIconIV.setImageResource(R.drawable.ic_icon_rain)
+            }
+        }
 
 
         //Telling the toolbar there will be a menu item

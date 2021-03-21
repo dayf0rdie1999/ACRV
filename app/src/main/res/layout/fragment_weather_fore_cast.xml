@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.weatherForeCastFragment"
-    android:background="@drawable/background">
+    tools:context=".fragments.weatherForeCastFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/citiesWeather_RV"
         android:layout_width="409dp"
         android:layout_height="729dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

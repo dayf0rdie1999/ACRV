@@ -7,7 +7,7 @@ import com.example.acrv.roomModel.CitiesModel
 import com.example.acrv.roomModel.UserCityWeather
 
 
-@Database(entities = [UserCityWeather::class, CitiesModel::class],version = 3,exportSchema = false)
+@Database(entities = [UserCityWeather::class, CitiesModel::class],version = 15,exportSchema = false)
 abstract class UserDatabase: RoomDatabase() {
 
     abstract fun userDao(): UserDao

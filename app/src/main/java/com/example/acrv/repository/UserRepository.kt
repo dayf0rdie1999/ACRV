@@ -23,12 +23,17 @@ class UserRepository(private val userDao: UserDao) {
         userDao.addUserCityWeather(userCityWeather)
     }
 
-    suspend fun deleteUserCityWeather(userCityWeather: UserCityWeather){
-        userDao.deleteUserCityWeather(userCityWeather)
-    }
 
     fun searchDatabase(searchQuery: String): Flow<List<UserCityWeather>> {
         return userDao.searchDatabase(searchQuery)
+    }
+
+    suspend fun deleteUserCityWeather(userCityWeather: UserCityWeather) {
+        return userDao.deleteUserCityWeather(userCityWeather)
+    }
+
+    suspend fun updateUserCityWeather(Rain: String,  Weather: String, Max_Temp: Double, Min_Temp: Double, Temp: Double, Humidity: Int, Wind: Double,inputCityName: String) {
+        return userDao.updateUserCityWeather(Rain,Weather,Max_Temp,Min_Temp,Temp,Humidity,Wind,inputCityName)
     }
 
     /**
@@ -43,8 +48,12 @@ class UserRepository(private val userDao: UserDao) {
         return userDao.citiesSearchDatabase(searchQuery)
     }
 
-    suspend fun deleteCitiesData(){
-        userDao.deleteCitiesData()
+    suspend fun updateDatabase(cityModel: CitiesModel) {
+        return userDao.updateCitiesModel(cityModel)
+    }
+
+    fun getDataSize(): Int{
+        return userDao.getDataSize()
     }
 
 }
